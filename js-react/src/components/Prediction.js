@@ -10,12 +10,12 @@ function Prediction(props) {
     if(price !== 0) {
     return (
         <div className="p-5">
-            <h1 style={{textAlign: 'center'}}>We predict your AirBnB will list for about ${parseFloat(price).toFixed(2)}</h1>
+            <h1 style={{textAlign: 'center'}}>We predict your AirBnB will list for about ${parseFloat(price).toFixed(2)} per night</h1>
             <br/>
            
             <p>We calculated these numbers based off of data we scraped from <a href="https://www.airbnb.com" target="_blank" rel="noopener noreferrer">airbnb.com</a>
             . We then cleaned the data with python code, and created a machine learning model on azure machine learning studio to predict 
-            the percentage of your goal that you will meet (whether it's over or under the goal).</p>
+            the value of a NY AirBnB rental per night.</p>
             <Button variant='outline-success' style={{ display: 'block', margin: 'auto' }}>Go List Your Property</Button>
         </div>
     )

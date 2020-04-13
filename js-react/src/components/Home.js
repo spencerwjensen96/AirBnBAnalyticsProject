@@ -18,7 +18,7 @@ export default function Home(props) {
               neighborhood: 'Manhatten',
               availability: 1,
               minimumNights: 1,
-              reviews: 0,
+              reviews: '',
             }}
             validateOnChange={false}
             validateOnBlur={false}
@@ -132,7 +132,7 @@ const PaymentForm = props => {
                           {props.form.values.minimumNights} {props.form.values.minimumNights > 1 ? 'night' : 'nights'} <br/><br/>
                         </FormHelperText>
 
-                        <Input title="Number Of Reviews" name="reviews" type="text" />
+                        <Input title="Number of Reviews" name="reviews" type="text" />
 
                         {/*submit button*/}
                         <bs.Button 
