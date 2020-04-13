@@ -37,26 +37,11 @@ function App() {
                 <Route path="/home">
                   <Home />
                 </Route>
-                <Route path="/search">
-                  <Search />
-                </Route>
-                <Route path="/campaign-dashboard">
-                  <CampaignDashboard />
-                </Route>
-                <Route path="/donor-dashboard">
-                  <DonorDashboard />
-                </Route>
                 <Route path="/prediction">
                   <Prediction />
                 </Route>
-                <Route path="/details/:id">
-                  <CampaignDetails />
-                </Route>
                 <Route path="/not-found">
                   <NotFound/>
-                </Route>
-                <Route path="/log-in">
-                  <LogIn/>
                 </Route>
                 <Route path="/">
                   <Home/>

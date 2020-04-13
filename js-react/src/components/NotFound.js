@@ -4,7 +4,7 @@ import React from 'react'
         render(){
           return (
             <div style={{textAlign: 'center'}}>
-                    <h1>Campaign Not Found</h1>
+                    <h1>Page Not Found</h1>
                     <br/>
                     <br/>
                     <p>Sorry about that</p>
