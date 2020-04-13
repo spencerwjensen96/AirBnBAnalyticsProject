@@ -14,40 +14,33 @@ export default function Home(props) {
         <Formik
             initialValues={{
               title: '',
-              description: '',
-              goal: 10000,
-              daysActive: 1,
-              isCharity: true,
-              hasBeneficiary: true,
-              visibleInSearch: true,
+              roomtype: 'Private Room',
+              neighborhood: 'Manhatten',
+              availability: 1,
+              minimumNights: 1,
+              reviews: 0,
             }}
             validateOnChange={false}
             validateOnBlur={false}
             validate={values => {
                 const errors = {}
                 if(!values.title) {
-                    errors.title = 'You must insert a title for you GoFundMe Project'
+                    errors.title = 'You must insert a title for your rental property'
                 }
-                if(!values.description) {
-                    errors.description = 'You must insert a description for you GoFundMe Project'
+                if(!values.roomtype) {
+                    errors.roomtype = 'You must insert a room type for your rental property'
                 }
-                if(!values.daysActive) {
-                    errors.daysActive = 'You must insert # of days you plan on keeping you GoFundMe Project Online'
+                if(!values.neighborhood) {
+                    errors.neighborhood = 'You must insert a neighborhood for your rental property'
                 }
-                if(!values.isCharity) {
-                    errors.isCharity = 'You must select whether your campaign is a charity or not'
+                if(!values.availability) {
+                    errors.availability = 'You must select availability for your rental property'
                 }
-                if(!values.hasBeneficiary) {
-                    errors.hasBeneficiary = 'You must select whether your campaign has a beneficiary or not'
+                if(!values.minimumNights) {
+                    errors.minimumNights = 'You must select a minimum # of nights to book your rental property'
                 }
-                if(!values.visibleInSearch) {
-                    errors.visibleInSearch = 'You must select whether your campaign is public or private'
-                }
-                if(values.daysActive && (values.daysActive > 365 || values.daysActive < 1)) {
-                    errors.daysActive = 'Number of days must be between 1 and 365'
-                }
-                if(!values.goal) {
-                    errors.goal = 'You must set a goal for your campaign'
+                if(!values.reviews) {
+                    errors.reviews = 'You must set a number of reviews that your rental property has'
                 }
 
                 return errors
@@ -57,12 +50,11 @@ export default function Home(props) {
                 // let PostURL = '/api/predict/' // this is for production/deployment
                 let apiResponse = await axios.post(PostURL, {
                     'title': values.title,
-                    'description': values.description,
-                    'daysActive': values.daysActive,
-                    'goal': values.goal,
-                    'isCharity': values.isCharity,
-                    'visibleInSearch': values.visibleInSearch,
-                    'hasBeneficiary': values.hasBeneficiary,
+                    'room_type': values.roomtype,
+                    'neighbourhood_group': values.neighborhood,
+                    'availability_365': values.availability,
+                    'minimum_nights': values.minimumNights,
+                    'number_of_reviews': values.reviews,
                 })
                 const azureResponse = JSON.parse(apiResponse.data)
                 const scoredLabelsIndex = azureResponse.Results.output1.value.ColumnNames.indexOf('Scored Labels')
@@ -92,7 +84,7 @@ const PaymentForm = props => {
   return(
     <>
     <div style={{textAlign: 'center'}}>
-        <h1>Predict the Success of Your Campaign</h1>
+        <h1>Predict the Value of Your Rental</h1>
     </div>
     {/*console.log("issubmitting 2", props.isSubmitting)*/}
     <bs.Container fluid className="p-0 flex-column">
@@ -100,57 +92,48 @@ const PaymentForm = props => {
         <bs.Row noGutters className="flex-grow-0 flex-shrink-0">
                 <bs.Col md={12} className="p-1 m-">
                         <div style={{textAlign: 'center'}}>
-                            <p>Enter your campaign information and we will guess how much money you will raise!</p>
+                            <p>Enter your rental information and we will predict how much money you should charge!</p>
                         </div>
                         <Input title="Title" name="title" type="text" />
-                        <Input title="Description" name="description" type="text" />
 
-                        {/*Dropdown is charity*/}
-                        <bs.Form.Label className="pt-2">Is your campaign a charity?</bs.Form.Label>
-                        <Field name="isCharity" as="select" placeholder="Yes" className="form-control">
-                          {options.map((option) =>
-                            <option key={option.label} value={option.value}>
+                        {/*Dropdown Room Type*/}
+                        <bs.Form.Label className="pt-2">Room Type</bs.Form.Label>
+                        <Field name="roomtype" as="select" placeholder="Private Room" className="form-control">
+                          {optionsRoomType.map((option) =>
+                            <option key={option.label} value={option.label}>
                               {option.label}
                             </option>
                             )}
                         </Field>
 
-                        {/*Dropdown has beneficiary*/}
-                        <bs.Form.Label className="pt-2">Does your campaign have a beneficiary?</bs.Form.Label>
-                        <Field name="hasBeneficiary" as="select" placeholder="Yes" className="form-control">
-                          {options.map((option) =>
-                            <option key={option.label} value={option.value}>
+                        {/*Dropdown Neighborhood*/}
+                        <bs.Form.Label className="pt-2">Which neighborhood is your rental in?</bs.Form.Label>
+                        <Field name="neighborhood" as="select" placeholder="Manhatten" className="form-control">
+                          {optionsNeighborhood.map((option) =>
+                            <option key={option.label} value={option.label}>
                               {option.label}
                             </option>
                             )}
                         </Field>
 
-                        {/*Dropdown visible in search*/}
-                        <bs.Form.Label className="pt-2">Is your campaign public?</bs.Form.Label>
-                        <Field name="visibleInSearch" as="select" placeholder="Yes" className="form-control">
-                          {options.map((option) =>
-                            <option key={option.label} value={option.value}>
-                              {option.label}
-                            </option>
-                            )}
-                        </Field>
-
-                        {/*Slider goal*/}
-                        <bs.Form.Label className="pt-3">Target Funding Goal</bs.Form.Label>
-                        <Field component={Slider} name="goal" min={100} max={100000} step={100} 
+                        {/*Slider availability*/}
+                        <bs.Form.Label className="pt-3">Availability (days per year)</bs.Form.Label>
+                        <Field component={Slider} name="availability" min={1} max={365} step={1} 
                           className="form-control" 
                           style={{  }}/>
                         <FormHelperText className="text-success">
                         ${props.form.values.goal} <br/>
                         </FormHelperText>
 
-                        {/*Slider daysActive*/}
-                        <bs.Form.Label className="pt-2">How long do you plan on accepting donations?</bs.Form.Label>
-                        <Field component={Slider} name="daysActive" min={1} max={365} step={1} 
+                        {/*Slider minimum nights*/}
+                        <bs.Form.Label className="pt-2">What is the minimun nights required for a booking?</bs.Form.Label>
+                        <Field component={Slider} name="minimumNights" min={1} max={15} step={1} 
                           className="form-control" />
                         <FormHelperText className="text-success">
-                          {props.form.values.daysActive} {props.form.values.daysActive > 1 ? 'days' : 'day'} <br/><br/>
+                          {props.form.values.daysActive} {props.form.values.daysActive > 1 ? 'night' : 'nights'} <br/><br/>
                         </FormHelperText>
+
+                        <Input title="Number Of Reviews" name="reviews" type="text" />
 
                         {/*submit button*/}
                         <bs.Button 
@@ -166,7 +149,7 @@ const PaymentForm = props => {
                                 size="sm"
                                 aria-hidden={true}
                                 hidden={!props.form.isSubmitting} /> 
-                        Predict Your Success</bs.Button>
+                        Predict Your Price</bs.Button>
                 </bs.Col>
 
         </bs.Row>
@@ -202,7 +185,17 @@ const Input = (props) => (
     )}</Field>
 );
 
-const options = [
- {"label": "Yes", "value": true},
- {"label": "No", "value": false}
+const optionsRoomType = [
+ {"label": "Private Room"},
+ {"label": "Entire Home/Apartment"},
+ {"label": "Shared Room"},
+ 
 ]
+
+const optionsNeighborhood = [
+    {"label": "Brooklyn"},
+    {"label": "Manhattan"},
+    {"label": "Queens"},
+    {"label": "Bronx"},
+    {"label": "Staten Island"},
+   ]
