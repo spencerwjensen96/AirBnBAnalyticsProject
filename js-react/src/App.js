@@ -8,13 +8,9 @@ import LeftSide from './components/LeftSide.js';
 import Home from './components/Home.js';
 import Footer from './components/Footer.js';
 import RightSide from './components/RightSide';
-import Search from './components/Search';
-import CampaignDashboard from './components/CampaignDashboard';
 import Prediction from './components/Prediction';
 import NotFound from './components/NotFound'
-import LogIn from './components/LogIn';
-import CampaignDetails from './components/CampaignDetails';
-import DonorDashboard from './components/DonorDashboard';
+
 
 function App() {
   return (

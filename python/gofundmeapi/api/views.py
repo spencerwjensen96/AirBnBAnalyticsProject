@@ -36,120 +36,52 @@ class Predict(APIView):
 
     @csrf_exempt
     def post(self, request, format=None):
-        serializer = PredictSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save() # add this as a prediction to our database
+        #serializer = PredictSerializer(data=request.data)
+        #if serializer.is_valid():
+            #serializer.save() # add this as a prediction to our database
 
             # here's where we do the connection with azure
             azureData = {
                 "Inputs": {
                     "input1": {
-                        "ColumnNames": [
-                            "Column 0", # line 45
-                            "Unnamed: 0",
-                            "url",
-                            "campaign_id",
-                            "auto_fb_post_mode",
-                            "collected_date",
-                            "category_id",
-                            "category",
-                            "currencycode",
-                            "current_amount",
-                            "goal", # +10
-                            "donators",
-                            "days_active", # +12
-                            "days_created",
-                            "title", # +14
-                            "description", # +15
-                            "default_url",
-                            "has_beneficiary", # +17
-                            "turn_off_donations",
-                            "user_id",
-                            "user_first_name",
-                            "user_last_name",
-                            "user_facebook_id",
-                            "visible_in_search", # +23
-                            "status",
-                            "is_launched",
-                            "campaign_image_url",
-                            "created_at",
-                            "launch_date",
-                            "campaign_hearts",
-                            "social_share_total",
-                            "location_city",
-                            "location_country",
-                            "location_zip",
-                            "is_charity", # +34
-                            "charity_valid",
-                            "Percent_complete",
-                            "Percent_complete_forGivenDays",
-                            "Money_Per_doner",
-                            "Percent_completeLN",
-                            "donatorsLN",
-                            "campaign_heartsLN",
-                            "social_share_totalLN",
-                            "goalLN",
-                            "current_amountLN",
-                            "days_activeCR"
+                    "ColumnNames": [
+                        "Column 0",
+                        "name",
+                        "neighbourhood_group",
+                        "neighbourhood",
+                        "latitude",
+                        "longitude",
+                        "room_type",
+                        "price",
+                        "minimum_nights",
+                        "number_of_reviews",
+                        "calculated_host_listings_count",
+                        "availability_365"
+                    ],
+                    "Values": [
+                        [
+                        "value",
+                        request.data['title'],
+                        request.data['neighborhood'],
+                        "value",
+                        "0",
+                        "value",
+                        request.data['roomtype'],
+                        "0",
+                        request.data['minimumNights'],
+                        request.data['reviews'],
+                        "0",
+                        request.data['availability']
                         ],
-                        "Values": [
-                            [
-                            "value",
-                            "value",
-                            "value",
-                            "0",
-                            "value",
-                            "value",
-                            "value",
-                            "value",
-                            "value",
-                            "0",
-                            request.data['goal'], # goals
-                            "value",
-                            request.data['daysActive'], # days active
-                            "value",
-                            request.data['title'], # title
-                            request.data['description'], # description
-                            "value",
-                            request.data['hasBeneficiary'], # has beneficiary
-                            "value",
-                            "value",
-                            "value",
-                            "value",
-                            "0",
-                            request.data['visibleInSearch'], # visible in search
-                            "0",
-                            "value",
-                            "value",
-                            "value",
-                            "value",
-                            "0",
-                            "0",
-                            "value",
-                            "value",
-                            "value",
-                            request.data['isCharity'], # is charity
-                            "0",
-                            "0",
-                            "0",
-                            "0",
-                            "0",
-                            "0",
-                            "0",
-                            "0",
-                            "0",
-                            "0",
-                            "0"
-                            ]
-                        ]
-                    },
+                    ]
+                    }
                 },
-                "GlobalParameters": {},
+                "GlobalParameters": {}
             }
             
             body = str.encode(json.dumps(azureData))
-            url = 'https://ussouthcentral.services.azureml.net/workspaces/45e53529d44640cd9204978a414d57bb/services/fa1d27f8d0284203bcadeee6e530da62/execute?api-version=2.0&details=true'
-            api_key = 'Tv58sTKmr1FAjJHlHi8/GTFQemljo1SMmG+p662OEAHVgpZl1Yi4Rf/Aeg9xCno8s9OSlc6isnyXTGamQw+bGw=='
+            url = 'https://ussouthcentral.services.azureml.net/workspaces/ff6ae193fb884c889b6e523dc91a4a26/services/ce433886c30b4c14839b5d9b3baff778/execute?api-version=2.0&details=true'
+            api_key = '1kJu77SI+Ip81BzCGKYJTCm90JyNHB3k8wbln3ah8jBa9Uq19Jo+5HeAxQQV8GePFcyVKKGGk5YRJvT/Q8J46g=='
             headers = {'Content-Type':'application/json', 'Authorization':('Bearer '+ api_key)}
             req = urllib.request.Request(url, body, headers) 
             try:

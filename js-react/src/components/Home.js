@@ -50,11 +50,11 @@ export default function Home(props) {
                 // let PostURL = '/api/predict/' // this is for production/deployment
                 let apiResponse = await axios.post(PostURL, {
                     'title': values.title,
-                    'room_type': values.roomtype,
-                    'neighbourhood_group': values.neighborhood,
-                    'availability_365': values.availability,
-                    'minimum_nights': values.minimumNights,
-                    'number_of_reviews': values.reviews,
+                    'roomtype': values.roomtype,
+                    'neighborhood': values.neighborhood,
+                    'availability': values.availability,
+                    'minimumNights': values.minimumNights,
+                    'reviews': values.reviews,
                 })
                 const azureResponse = JSON.parse(apiResponse.data)
                 const scoredLabelsIndex = azureResponse.Results.output1.value.ColumnNames.indexOf('Scored Labels')
@@ -65,11 +65,10 @@ export default function Home(props) {
                     })
                     return;
                 }
-                const predictedPercent = azureResponse.Results.output1.value.Values[0][scoredLabelsIndex]
+                const price = azureResponse.Results.output1.value.Values[0][scoredLabelsIndex]
                 history.push({
                     pathname: '/prediction',
-                    calculatedPercent: predictedPercent,
-                    goal: values.goal,
+                    price: price,
                 });
                 return;
             }}
@@ -122,7 +121,7 @@ const PaymentForm = props => {
                           className="form-control" 
                           style={{  }}/>
                         <FormHelperText className="text-success">
-                        ${props.form.values.goal} <br/>
+                        {props.form.values.availability} days per year <br/>
                         </FormHelperText>
 
                         {/*Slider minimum nights*/}
@@ -130,7 +129,7 @@ const PaymentForm = props => {
                         <Field component={Slider} name="minimumNights" min={1} max={15} step={1} 
                           className="form-control" />
                         <FormHelperText className="text-success">
-                          {props.form.values.daysActive} {props.form.values.daysActive > 1 ? 'night' : 'nights'} <br/><br/>
+                          {props.form.values.minimumNights} {props.form.values.minimumNights > 1 ? 'night' : 'nights'} <br/><br/>
                         </FormHelperText>
 
                         <Input title="Number Of Reviews" name="reviews" type="text" />
